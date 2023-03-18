@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -17,6 +18,13 @@ public class MemoryCardLogic : MonoBehaviour
 
     //Hold the sprites of our memory images
     public Sprite[] memoryImages;
+
+    //Text objects to adjust
+    [SerializeField]
+    private TMP_Text guessesText;
+    [SerializeField]
+    private TMP_Text matchesText;
+
 
     //Gameplay logic variables
     private bool hasFlippedFirst, hasFlippedSecond;     //Keeping track of flips per guess
@@ -38,6 +46,14 @@ public class MemoryCardLogic : MonoBehaviour
 
         //Variable initializations
         numPairs = cards.Count / 2;
+        guessAmount = correctAmount = 0;
+
+        //Reset our saved score
+        PlayerPrefs.SetInt("guesses", guessAmount);
+        PlayerPrefs.SetInt("matches", correctAmount);
+
+        //Update our textboxes
+        UpdateTextBoxes();
     }
 
     //Function to call when we need to find all the cards in our grid
@@ -102,8 +118,8 @@ public class MemoryCardLogic : MonoBehaviour
             //Create a temporary copy of the current index
             Sprite tempSprite = list[i];
 
-            //Get a random index within our list's count
-            int randomIndex = Random.Range(0, list.Count);
+            //Get a random index between the current index and the elements in a list
+            int randomIndex = Random.Range(i, list.Count);
 
             //Place the sprite from this random index and place it into the sprite of the current iteration index
             list[i] = list[randomIndex];
@@ -119,7 +135,6 @@ public class MemoryCardLogic : MonoBehaviour
         //Get the name and index of the currently selected card that the user has clicked
         string currentName = UnityEngine.EventSystems.EventSystem.current.currentSelectedGameObject.name;
         string currentIndex = currentName.Remove(0, 12);
-        //Debug.Log("The card clicked was #" + currentIndex);
 
         //Check if this is either the first or second flip of the guess
         if (!hasFlippedFirst)
@@ -136,8 +151,11 @@ public class MemoryCardLogic : MonoBehaviour
             //Set the sprite for the current card we clicked
             cards[firstIndex].image.sprite = memories[firstIndex];
 
-        } else if (!hasFlippedSecond)
+        } else if (!hasFlippedSecond && (int.Parse(currentIndex)-1 != firstIndex))
         {
+            //We also check if the second guess isn't just the first card again because you can still click on it
+            //I've tried just disabling the card but it makes it turn grey after clicking it.
+
             //Now we have flipped for the first time
             hasFlippedSecond = true;
 
@@ -152,13 +170,17 @@ public class MemoryCardLogic : MonoBehaviour
 
             //Increment our amount of guesses
             guessAmount++;
+            //Save the guess score
+            PlayerPrefs.SetInt("guesses", guessAmount);
+            //Update textboxes
+            UpdateTextBoxes();
 
             //Check our matches with our match checker coroutine
             StartCoroutine(CheckForMatch());
         }
     }
 
-    //Allow a coroutine to check our matches
+    //Allow a coroutine to check our matches [And also give a delay]
     IEnumerator CheckForMatch()
     {
         //Add a delay so the player can view their guesses
@@ -169,7 +191,7 @@ public class MemoryCardLogic : MonoBehaviour
         {
             //We have a match!
 
-            //First, let's disable our guesses
+            //First, let's disable our guesses so we won't click them again
             cards[firstIndex].interactable = false;
             cards[secondIndex].interactable = false;
             //Then, make them invisible
@@ -178,7 +200,6 @@ public class MemoryCardLogic : MonoBehaviour
 
             //Now check for our win condition
             WinConditionCheck();
-            Debug.Log("Match!");
         }
         else
         {
@@ -187,8 +208,6 @@ public class MemoryCardLogic : MonoBehaviour
             //Let's return these images back to their flipped side
             cards[firstIndex].image.sprite = unflippedImage;
             cards[secondIndex].image.sprite = unflippedImage;
-
-            Debug.Log("Not match...");
         }
 
         //Reset our flipped booleans
@@ -200,6 +219,9 @@ public class MemoryCardLogic : MonoBehaviour
     {
         //Increment our correct guess amount
         correctAmount++;
+        //Save our correct guesses
+        PlayerPrefs.SetInt("matches", correctAmount);
+        UpdateTextBoxes();
 
         //Now check if the amount of correct guesses match the amount of pairs possible
         if (correctAmount == numPairs)
@@ -207,5 +229,12 @@ public class MemoryCardLogic : MonoBehaviour
             //If so, we won the game!
             Debug.Log("You won!!!");
         }
+    }
+
+    //Function to update our text boxes
+    void UpdateTextBoxes()
+    {
+        guessesText.text = "Guesses: " + guessAmount;
+        matchesText.text = "Matches: " + correctAmount;
     }
 }
