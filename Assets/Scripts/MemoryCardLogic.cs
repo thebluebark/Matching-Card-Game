@@ -25,11 +25,10 @@ public class MemoryCardLogic : MonoBehaviour
     [SerializeField]
     private TMP_Text matchesText;
 
-
     //Gameplay logic variables
     private bool hasFlippedFirst, hasFlippedSecond;     //Keeping track of flips per guess
     private int guessAmount, correctAmount;             //Keeping track of guess amounts with correct guesses
-    private int numPairs;                              //Hold the amount of pairs possible
+    private int numPairs;                               //Hold the amount of pairs possible
     private int firstIndex, secondIndex;                //Which guess corresponds to which index in the card set
     private string firstName, secondName;               //Names of the sprites to compare with
 
@@ -96,7 +95,7 @@ public class MemoryCardLogic : MonoBehaviour
         for(int i = 0; i < cardCount; i++)
         {
             //When we reach half the cards of our grid, we want to reset the sprite index
-            //This makes sure that we only use the amount of cards that is half of our card number
+            //That way we can ensure that we have two sets of sprites in pairs
             if (spriteIndex == cardCount / 2) spriteIndex = 0;
 
             //Add the sprite to our memory list
