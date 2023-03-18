@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class MemoryCardLogic : MonoBehaviour
 {
@@ -226,7 +227,7 @@ public class MemoryCardLogic : MonoBehaviour
         if (correctAmount == numPairs)
         {
             //If so, we won the game!
-            Debug.Log("You won!!!");
+            SceneManager.LoadScene("GameOver");
         }
     }
 

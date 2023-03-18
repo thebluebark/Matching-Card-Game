@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class ScoreReport : MonoBehaviour
 {
+    //This is to update our score report with what we saved as guesses and matches
+
     private TMP_Text scoreReportText;
 
     private void Awake()
