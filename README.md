@@ -8,7 +8,8 @@ Your friends challenge you to a memory game featuring a deck full of cartoon cha
 # Game Controls
 Use your mouse to click on the cards!
 
-#Installation
+# Installation
+
 You can clone the repository for this game from this GitHub repository.
 
 With this, you can build your own version of the game, or run it in Unity Editor.
