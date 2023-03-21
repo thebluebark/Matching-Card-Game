@@ -10,5 +10,7 @@ Use your mouse to click on the cards!
 
 Installation
 You can clone the repository for this game from this GitHub repository.
+
 With this, you can build your own version of the game, or run it in Unity Editor.
+
 There is also an already built version of this game within the /bin directory if you just want to run it right away.
