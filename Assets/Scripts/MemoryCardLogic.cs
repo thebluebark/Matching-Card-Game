@@ -194,9 +194,9 @@ public class MemoryCardLogic : MonoBehaviour
             //First, let's disable our guesses so we won't click them again
             cards[firstIndex].interactable = false;
             cards[secondIndex].interactable = false;
-            //Then, make them invisible
-            cards[firstIndex].image.color = new Color(0, 0, 0, 0);
-            cards[secondIndex].image.color = new Color(0, 0, 0, 0);
+            //Then, make them slightly invisible
+            cards[firstIndex].image.color = new Color(255, 255, 255, 137);
+            cards[secondIndex].image.color = new Color(255, 255, 255, 137);
 
             //Now check for our win condition
             WinConditionCheck();
